@@ -1,0 +1,5 @@
+2025-11-09 22:17:22 [XNIO-1 task-2] ERROR c.r.c.s.h.SaTokenExceptionHandler - 请求地址'/getRouters',认证失败'未能读取到有效 token',无法访问系统资源
+2025-11-09 22:17:27 [XNIO-1 task-3] ERROR c.r.c.s.h.SaTokenExceptionHandler - 请求地址'/getInfo',认证失败'未能读取到有效 token',无法访问系统资源
+2025-11-09 22:17:40 [XNIO-1 task-2] ERROR c.r.c.w.h.GlobalExceptionHandler - 验证码错误
+2025-11-09 22:17:45 [XNIO-1 task-2] ERROR c.r.c.w.h.GlobalExceptionHandler - 验证码错误
+2025-11-09 22:17:46 [XNIO-1 task-2] ERROR c.r.c.w.h.GlobalExceptionHandler - 验证码错误
