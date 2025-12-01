@@ -16,6 +16,7 @@ com.ruoyi.system.domain.bo.SysOssConfigBo
 com.ruoyi.system.domain.bo.SysOssBo
 com.ruoyi.system.domain.entity.SysOperLog
 com.ruoyi.system.domain.bo.SysDictDataBo
+com.ruoyi.system.domain.vo.MessageAnalysisReportVo
 com.ruoyi.system.domain.vo.SysMenuVo
 com.ruoyi.system.domain.bo.SysPostBo
 com.ruoyi.system.domain.vo.SysPostVo
