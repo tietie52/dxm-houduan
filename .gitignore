@@ -1,18 +1,11 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# src/main/resources/application.yml
+# src/main/resources/application-dev.yml
 
-# Other files and folders
-.settings/
+target/
+logs/
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.i
