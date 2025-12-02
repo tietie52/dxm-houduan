@@ -1,0 +1,21 @@
+{
+  "name": "dxm-houduan",
+  "rootPath": "c:\\Users\\86191\\Desktop\\dxm-houduan",
+  "sourcePaths": [
+    "ruoyi-admin-wms/src/main/java",
+    "ruoyi-admin-wms/target/generated-sources/annotations",
+    "ruoyi-common/ruoyi-common-web/src/main/java",
+    "ruoyi-common/ruoyi-common-core/src/main/java",
+    "ruoyi-common/ruoyi-common-translation/src/main/java",
+    "ruoyi-modules/ruoyi-system/src/main/java"
+  ],
+  "referencedLibraries": [
+    "ruoyi-admin-wms/target/classes/**/*.jar",
+    "ruoyi-common/ruoyi-common-web/target/classes/**/*.jar",
+    "ruoyi-common/ruoyi-common-core/target/classes/**/*.jar",
+    "ruoyi-common/ruoyi-common-json/target/classes/**/*.jar",
+    "ruoyi-common/ruoyi-common-translation/target/classes/**/*.jar",
+    "ruoyi-modules/ruoyi-system/target/classes/**/*.jar"
+  ],
+  "type": "maven"
+}

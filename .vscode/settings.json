@@ -1,3 +1,23 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.project.sourcePaths": [
+        "ruoyi-admin-wms/src/main/java",
+        "ruoyi-admin-wms/target/generated-sources/annotations",
+        "ruoyi-common/ruoyi-common-web/src/main/java",
+        "ruoyi-common/ruoyi-common-core/src/main/java",
+        "ruoyi-common/ruoyi-common-translation/src/main/java",
+        "ruoyi-modules/ruoyi-system/src/main/java"
+    ],
+    "java.project.referencedLibraries": [
+        "ruoyi-admin-wms/target/classes/**/*.jar",
+        "ruoyi-common/ruoyi-common-web/target/classes/**/*.jar",
+        "ruoyi-common/ruoyi-common-core/target/classes/**/*.jar",
+        "ruoyi-common/ruoyi-common-json/target/classes/**/*.jar",
+        "ruoyi-common/ruoyi-common-translation/target/classes/**/*.jar",
+        "ruoyi-modules/ruoyi-system/target/classes/**/*.jar"
+    ],
+    "java.configuration.maven.userSettings": "C:\\Users\\86191\\.m2\\settings.xml",
+    "java.import.gradle.enabled": false,
+    "java.import.maven.enabled": true
 }
