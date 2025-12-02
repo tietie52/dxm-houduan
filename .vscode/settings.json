@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.project.sourcePaths": [
@@ -20,4 +21,7 @@
     "java.configuration.maven.userSettings": "C:\\Users\\86191\\.m2\\settings.xml",
     "java.import.gradle.enabled": false,
     "java.import.maven.enabled": true
+=======
+    "java.compile.nullAnalysis.mode": "automatic"
+>>>>>>> a89d9f8c6fd0896a61490ee76853560cc5076ecb
 }
