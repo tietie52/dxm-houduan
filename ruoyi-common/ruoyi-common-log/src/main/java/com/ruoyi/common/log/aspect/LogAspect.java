@@ -94,8 +94,15 @@ public class LogAspect {
             operLog.setOperIp(ip);
             operLog.setOperUrl(StringUtils.substring(ServletUtils.getRequest().getRequestURI(), 0, 255));
             LoginUser loginUser = LoginHelper.getLoginUser();
-            operLog.setOperName(loginUser.getUsername());
-            operLog.setDeptName(loginUser.getDeptName());
+            // 处理未登录用户的情况
+            if (ObjectUtil.isNotNull(loginUser)) {
+                operLog.setOperName(loginUser.getUsername());
+                operLog.setDeptName(loginUser.getDeptName());
+            } else {
+                // 未登录用户默认值
+                operLog.setOperName("匿名用户");
+                operLog.setDeptName("未知部门");
+            }
 
             if (e != null) {
                 operLog.setStatus(BusinessStatus.FAIL.ordinal());

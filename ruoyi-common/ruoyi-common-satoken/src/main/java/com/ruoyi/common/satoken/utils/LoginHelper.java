@@ -75,12 +75,17 @@ public class LoginHelper {
         if (loginUser != null) {
             return loginUser;
         }
-        SaSession session = StpUtil.getTokenSession();
-        if (ObjectUtil.isNull(session)) {
+        try {
+            SaSession session = StpUtil.getTokenSession();
+            if (ObjectUtil.isNull(session)) {
+                return null;
+            }
+            loginUser = (LoginUser) session.get(LOGIN_USER_KEY);
+            SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
+        } catch (cn.dev33.satoken.exception.NotLoginException e) {
+            // 用户未登录，返回 null
             return null;
         }
-        loginUser = (LoginUser) session.get(LOGIN_USER_KEY);
-        SaHolder.getStorage().set(LOGIN_USER_KEY, loginUser);
         return loginUser;
     }
 

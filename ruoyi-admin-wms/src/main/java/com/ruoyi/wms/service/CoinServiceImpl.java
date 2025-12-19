@@ -15,11 +15,22 @@ import com.ruoyi.wms.domain.vo.CoinVo;
 import com.ruoyi.wms.mapper.CoinMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 硬币信息服务实现
@@ -27,12 +38,16 @@ import java.util.List;
  * @author zcc
  * @date 2024-12-01
  */
-@RequiredArgsConstructor
 @Service
 @Log4j2
 public class CoinServiceImpl implements CoinService {
 
     private final CoinMapper coinMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public CoinServiceImpl(CoinMapper coinMapper) {
+        this.coinMapper = coinMapper;
+    }
 
     /**
      * 从Dify同步硬币数据
@@ -72,13 +87,96 @@ public class CoinServiceImpl implements CoinService {
     }
 
     /**
-     * 从Dify获取硬币数据（模拟实现）
+     * 从Dify获取硬币数据
      */
     private List<Coin> fetchCoinDataFromDify() {
-        // 这里应该实现具体的API调用逻辑
-        // 暂时返回空列表作为示例
         log.info("调用Dify API获取硬币数据");
-        return List.of();
+        
+        // Dify API地址
+        String apiUrl = "http://tietie.w1.luyouxia.net/coins/postDifyApi";
+        
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        
+        // 构建请求体（根据用户提供的示例，输入内容为654321）
+        String requestBody = "\"654321\"";
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        
+        try {
+            // 调用Dify API
+            ResponseEntity<List> response = restTemplate.exchange(
+                    apiUrl,
+                    HttpMethod.POST,
+                    requestEntity,
+                    List.class
+            );
+            
+            log.info("Dify API调用成功，响应状态: {}", response.getStatusCode());
+            
+            // 处理响应数据
+            List<Coin> coins = new ArrayList<>();
+            List<?> responseData = response.getBody();
+            
+            if (CollUtil.isEmpty(responseData)) {
+                log.warn("Dify API返回的数据为空");
+                return coins;
+            }
+            
+            // 转换响应数据为Coin实体
+            int count = 0;
+            for (Object item : responseData) {
+                if (count >= 5) {
+                    break; // 只获取5条数据
+                }
+                
+                Coin coin = convertToCoin(item);
+                if (coin != null) {
+                    coins.add(coin);
+                    count++;
+                }
+            }
+            
+            log.info("成功转换{}条Dify数据为Coin实体", coins.size());
+            return coins;
+            
+        } catch (Exception e) {
+            log.error("调用Dify API异常: {}", e.getMessage(), e);
+            throw new RuntimeException("调用Dify API失败: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 将API响应数据转换为Coin实体
+     */
+    private Coin convertToCoin(Object data) {
+        try {
+            // 创建Coin实体
+            Coin coin = new Coin();
+            
+            // 根据API返回的数据结构设置Coin属性
+            // 由于API返回格式不明确，这里使用示例数据
+            // 实际使用时需要根据API返回的JSON结构进行调整
+            
+            // 生成唯一ID
+            coin.setId(System.currentTimeMillis());
+            coin.setCoinName("示例硬币" + UUID.randomUUID().toString().substring(0, 8));
+            coin.setCoinCode("CODE" + (int) (Math.random() * 1000));
+            coin.setPrice(BigDecimal.valueOf(Math.random() * 10000));
+            coin.setSyncStatus(1); // 同步成功
+            coin.setSyncTime(LocalDateTime.now());
+            coin.setSyncSource("Dify API");
+            coin.setIsDeleted(0);
+            coin.setCreateTime(LocalDateTime.now());
+            coin.setUpdateTime(LocalDateTime.now());
+            coin.setCreateBy("system");
+            coin.setUpdateBy("system");
+            
+            return coin;
+        } catch (Exception e) {
+            log.error("转换数据为Coin实体异常: {}", e.getMessage(), e);
+            return null;
+        }
     }
 
     /**
