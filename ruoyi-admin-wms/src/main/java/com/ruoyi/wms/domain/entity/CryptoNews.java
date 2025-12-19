@@ -25,6 +25,18 @@ public class CryptoNews extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 创建者（重写父类字段，不映射到数据库）
+     */
+    @TableField(exist = false)
+    private String createBy;
+
+    /**
+     * 更新者（重写父类字段，不映射到数据库）
+     */
+    @TableField(exist = false)
+    private String updateBy;
+
+    /**
      * 主键ID
      */
     @TableId(value = "id")

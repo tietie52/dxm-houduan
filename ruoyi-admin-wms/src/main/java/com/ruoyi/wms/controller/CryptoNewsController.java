@@ -25,7 +25,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/crypto-news")
+@RequestMapping({"/api/crypto-news", "/crypto-news"})
 @CrossOrigin(origins = "*", maxAge = 3600) // 解决前端跨域问题
 public class CryptoNewsController extends BaseController {
 
