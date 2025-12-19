@@ -82,7 +82,18 @@ public class CryptoNewsServiceImpl implements CryptoNewsService {
     @Override
     @Transactional
     public Boolean insertByBo(CryptoNewsBo bo) {
-        CryptoNews entity = MapstructUtils.convert(bo, CryptoNews.class);
+        // 手动转换Bo到Entity
+        CryptoNews entity = new CryptoNews();
+        entity.setTitle(bo.getTitle());
+        entity.setContent(bo.getContent());
+        entity.setCryptoType(bo.getCryptoType());
+        entity.setEmotion(bo.getEmotion());
+        entity.setPublishTime(bo.getPublishTime());
+        entity.setSource(bo.getSource());
+        entity.setIsDeleted(bo.getIsDeleted());
+        entity.setCreateTime(bo.getCreateTime());
+        entity.setUpdateTime(bo.getUpdateTime());
+        
         validEntityBeforeSave(entity);
         return cryptoNewsMapper.insert(entity) > 0;
     }
@@ -93,7 +104,19 @@ public class CryptoNewsServiceImpl implements CryptoNewsService {
     @Override
     @Transactional
     public Boolean updateByBo(CryptoNewsBo bo) {
-        CryptoNews entity = MapstructUtils.convert(bo, CryptoNews.class);
+        // 手动转换Bo到Entity
+        CryptoNews entity = new CryptoNews();
+        entity.setId(bo.getId());
+        entity.setTitle(bo.getTitle());
+        entity.setContent(bo.getContent());
+        entity.setCryptoType(bo.getCryptoType());
+        entity.setEmotion(bo.getEmotion());
+        entity.setPublishTime(bo.getPublishTime());
+        entity.setSource(bo.getSource());
+        entity.setIsDeleted(bo.getIsDeleted());
+        entity.setCreateTime(bo.getCreateTime());
+        entity.setUpdateTime(bo.getUpdateTime());
+        
         validEntityBeforeSave(entity);
         return cryptoNewsMapper.updateById(entity) > 0;
     }
