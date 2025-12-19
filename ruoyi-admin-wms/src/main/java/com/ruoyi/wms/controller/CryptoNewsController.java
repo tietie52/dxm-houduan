@@ -25,7 +25,8 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/crypto-news")
+@RequestMapping("/api/crypto-news")
+@CrossOrigin(origins = "*", maxAge = 3600) // 解决前端跨域问题
 public class CryptoNewsController extends BaseController {
 
     private final CryptoNewsService cryptoNewsService;
@@ -34,7 +35,17 @@ public class CryptoNewsController extends BaseController {
      * 查询加密货币资讯列表
      */
     @GetMapping("/list")
-    public TableDataInfo<CryptoNewsVo> list(CryptoNewsBo bo, PageQuery pageQuery) {
+    // 修正：使用无参构造+setter方法初始化PageQuery，适配若依框架
+    public TableDataInfo<CryptoNewsVo> list(
+            CryptoNewsBo bo,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize
+    ) {
+        // 先创建无参PageQuery对象，再通过setter赋值（若依框架标准用法）
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setPageNum(pageNum);
+        pageQuery.setPageSize(pageSize);
+        
         return cryptoNewsService.queryPageList(bo, pageQuery);
     }
 
