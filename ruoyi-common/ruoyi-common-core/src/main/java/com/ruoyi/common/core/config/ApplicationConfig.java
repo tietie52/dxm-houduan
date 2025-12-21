@@ -8,11 +8,24 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+import java.security.NoSuchAlgorithmException;
+import java.security.KeyManagementException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 程序注解配置
  *
  * @author Lion Li
  */
+@Slf4j
 @AutoConfiguration
 @EnableAspectJAutoProxy
 @EnableAsync(proxyTargetClass = true)
@@ -24,10 +37,61 @@ public class ApplicationConfig {
      */
     @Bean
     public RestTemplate restTemplate() {
+        // 创建简单的RestTemplate，不使用代理
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(5000);
-        return new RestTemplate(factory);
+        
+        // 设置超时时间
+        factory.setConnectTimeout(120000); // 连接超时2分钟
+        factory.setReadTimeout(120000);    // 读取超时2分钟
+        factory.setBufferRequestBody(true);
+        
+        // 配置SSL支持
+        final SSLContext sslContext;
+        try {
+            sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                    
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+                    
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
+                }
+            }, new java.security.SecureRandom());
+            
+            // 创建HttpsURLConnectionFactory并设置SSL上下文
+            factory = new SimpleClientHttpRequestFactory() {
+                @Override
+                protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
+                    super.prepareConnection(connection, httpMethod);
+                    if (connection instanceof HttpsURLConnection) {
+                        ((HttpsURLConnection) connection).setSSLSocketFactory(sslContext.getSocketFactory());
+                        ((HttpsURLConnection) connection).setHostnameVerifier((hostname, session) -> true);
+                    }
+                }
+            };
+            
+            // 重新设置超时时间
+            factory.setConnectTimeout(120000);
+            factory.setReadTimeout(120000);
+            factory.setBufferRequestBody(true);
+            
+        } catch (Exception e) {
+            log.error("SSL配置异常: {}", e.getMessage(), e);
+            return new RestTemplate(new SimpleClientHttpRequestFactory());
+        }
+        
+        // 创建RestTemplate实例
+        RestTemplate restTemplate = new RestTemplate(factory);
+        
+        return restTemplate;
     }
 
 }
