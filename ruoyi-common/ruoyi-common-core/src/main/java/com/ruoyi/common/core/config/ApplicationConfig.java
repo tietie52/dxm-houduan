@@ -37,14 +37,6 @@ public class ApplicationConfig {
      */
     @Bean
     public RestTemplate restTemplate() {
-        // 创建简单的RestTemplate，不使用代理
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        
-        // 设置超时时间
-        factory.setConnectTimeout(120000); // 连接超时2分钟
-        factory.setReadTimeout(120000);    // 读取超时2分钟
-        factory.setBufferRequestBody(true);
-        
         // 配置SSL支持
         final SSLContext sslContext;
         try {
@@ -66,8 +58,8 @@ public class ApplicationConfig {
                 }
             }, new java.security.SecureRandom());
             
-            // 创建HttpsURLConnectionFactory并设置SSL上下文
-            factory = new SimpleClientHttpRequestFactory() {
+            // 创建SimpleClientHttpRequestFactory并设置SSL上下文
+            SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory() {
                 @Override
                 protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
                     super.prepareConnection(connection, httpMethod);
@@ -78,20 +70,17 @@ public class ApplicationConfig {
                 }
             };
             
-            // 重新设置超时时间
-            factory.setConnectTimeout(120000);
-            factory.setReadTimeout(120000);
+            // 设置超时时间
+            factory.setConnectTimeout(120000); // 连接超时2分钟
+            factory.setReadTimeout(120000);    // 读取超时2分钟
             factory.setBufferRequestBody(true);
             
+            // 创建RestTemplate实例
+            return new RestTemplate(factory);
         } catch (Exception e) {
             log.error("SSL配置异常: {}", e.getMessage(), e);
             return new RestTemplate(new SimpleClientHttpRequestFactory());
         }
-        
-        // 创建RestTemplate实例
-        RestTemplate restTemplate = new RestTemplate(factory);
-        
-        return restTemplate;
     }
 
 }

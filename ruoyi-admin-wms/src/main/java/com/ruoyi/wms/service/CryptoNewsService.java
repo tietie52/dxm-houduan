@@ -45,4 +45,20 @@ public interface CryptoNewsService {
      * 校验并批量删除加密货币资讯
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 从Dify同步加密货币资讯数据
+     *
+     * @return 同步成功的数量
+     */
+    Integer syncFromDify();
+
+    /**
+     * 从Dify同步加密货币资讯数据（带锁）
+     * 用于手动同步和定时任务的通用方法
+     *
+     * @param count 获取资讯数量
+     * @return 同步成功的数量
+     */
+    Integer syncFromDifyWithLock(int count);
 }

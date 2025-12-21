@@ -83,4 +83,18 @@ public class CryptoNewsController extends BaseController {
     public R<Void> remove(@PathVariable Collection<Long> ids) {
         return toAjax(cryptoNewsService.deleteWithValidByIds(ids, true));
     }
+
+    /**
+     * 从Dify同步加密货币资讯数据
+     */
+    @Log(title = "加密货币资讯", businessType = BusinessType.OTHER)
+    @PostMapping("/syncFromDify")
+    public R<Integer> syncFromDify() {
+        try {
+            Integer syncCount = cryptoNewsService.syncFromDify();
+            return R.ok("同步成功，共获取" + syncCount + "条资讯", syncCount);
+        } catch (Exception e) {
+            return R.fail("同步失败: " + e.getMessage());
+        }
+    }
 }
