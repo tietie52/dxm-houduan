@@ -63,7 +63,7 @@ public class CoinServiceImpl implements CoinService {
      */
     @Override
     @Transactional
-    public int syncFromDify() {
+    public synchronized int syncFromDify() {
         log.info("开始同步硬币数据");
         
         try {
@@ -101,12 +101,6 @@ public class CoinServiceImpl implements CoinService {
     private List<Coin> fetchCoinDataFromDify() {
         log.info("调用Dify API获取硬币数据");
         
-        // 快速返回空列表，避免Dify API超时导致服务自动关闭
-        // 实际生产环境中可以考虑异步处理或优化Dify API调用
-        log.info("为避免服务自动关闭，临时返回空列表");
-        return new ArrayList<>();
-        
-        /*
         try {
             // 构建Dify API请求头
             HttpHeaders headers = new HttpHeaders();
@@ -371,7 +365,6 @@ public class CoinServiceImpl implements CoinService {
         } finally {
             log.info("Dify API调用流程结束");
         }
-        */
     }
     
     /**
@@ -393,8 +386,7 @@ public class CoinServiceImpl implements CoinService {
             coin.setCoinName(name);
             coin.setCoinCode(symbol);
             
-            // 生成唯一ID
-            coin.setId(System.currentTimeMillis());
+            // 不手动设置ID，让数据库自动生成
             coin.setPrice(BigDecimal.valueOf(Math.random() * 10000));
             coin.setSyncStatus(1); // 同步成功
             coin.setSyncTime(LocalDateTime.now());
